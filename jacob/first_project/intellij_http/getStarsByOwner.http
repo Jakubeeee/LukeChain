@@ -1,0 +1,5 @@
+# curl http://localhost:8000/blocks/mzY9avi4UUJBMgwuWvmBcEsNsSLKKxYGN5
+GET http://localhost:8000/blocks/mzY9avi4UUJBMgwuWvmBcEsNsSLKKxYGN5
+
+###
+

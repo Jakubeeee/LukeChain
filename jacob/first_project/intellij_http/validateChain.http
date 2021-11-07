@@ -1,0 +1,5 @@
+# curl http://localhost:8000/validatechain
+GET http://localhost:8000/validateChain
+
+###
+

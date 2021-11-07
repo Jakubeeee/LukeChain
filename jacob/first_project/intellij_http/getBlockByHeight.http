@@ -1,0 +1,5 @@
+# curl http://localhost:8000/block/height/0
+GET http://localhost:8000/block/height/1
+
+###
+
