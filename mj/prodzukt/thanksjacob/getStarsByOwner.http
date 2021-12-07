@@ -1,0 +1,5 @@
+# curl http://{{host}}:{{port}}/blocks/mzY9avi4UUJBMgwuWvmBcEsNsSLKKxYGN5
+GET http://{{host}}:{{port}}/blocks/mzY9avi4UUJBMgwuWvmBcEsNsSLKKxYGN5
+
+###
+

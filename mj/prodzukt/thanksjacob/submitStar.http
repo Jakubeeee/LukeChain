@@ -1,0 +1,15 @@
+POST http://{{host}}:{{port}}/submitstar
+Content-Type: application/json
+
+{
+  "address": "mzY9avi4UUJBMgwuWvmBcEsNsSLKKxYGN5",
+  "signature": "HwAlMvbO1xRqFxz+ZYFG91e5IxO2pRRt9/qWor8BIslbQeFy+VM1/78PYd57DHxlYGj7yuhdVLzbHVr02sigqu0=",
+  "message": "mzY9avi4UUJBMgwuWvmBcEsNsSLKKxYGN5:1636282496:starRegistry",
+  "star": {
+    "dec": "68° 52' 56.9",
+    "ra": "16h 29m 1.0s",
+    "story": "Testing the story 6"
+  }
+}
+
+###

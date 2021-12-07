@@ -1,0 +1,5 @@
+# curl http://{{host}}:{{port}}/block/height/0
+GET http://{{host}}:{{port}}/block/height/1
+
+###
+

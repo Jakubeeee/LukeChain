@@ -1,0 +1,5 @@
+# curl http://{{host}}:{{port}}/validatechain
+GET http://{{host}}:{{port}}/validateChain
+
+###
+

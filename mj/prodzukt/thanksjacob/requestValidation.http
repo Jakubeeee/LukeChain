@@ -1,0 +1,10 @@
+# curl -i -X POST -H 'Content-Type: application/json' -d '{"address":"mzY9avi4UUJBMgwuWvmBcEsNsSLKKxYGN5"}' http://{{host}}:{{port}}/requestValidation
+POST http://{{host}}:{{port}}/requestValidation
+Content-Type: application/json
+
+{
+  "address": "mzY9avi4UUJBMgwuWvmBcEsNsSLKKxYGN5"
+}
+
+###
+
