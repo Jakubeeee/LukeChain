@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Deploy a Remix Contract</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+
+<body>
+<div>
+    <h1>Ethereum Secret Messenger</h1>
+    <hr>
+
+    <label for="message">This site writes a secret message to the Ethereum
+        blockchain!</label>
+    <input id="userInput" type="text">
+
+    <button id="setMessageButton">Set secret message</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+<script>
+
+    // if (typeof web3 !== 'undefined') {
+    //     web3 = new Web3(web3.currentProvider);
+    // } else {
+    //     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+    // }
+    const web3 = new Web3('ws://localhost:7545');
+
+    // window.addEventListener('load', async function() {
+    //     if (typeof web3 !== 'undefined') {
+    //         console.log('web3 is enabled')
+    //         if (web3.currentProvider.isMetaMask === true) {
+    //             console.log('MetaMask is active')
+    //         } else {
+    //             console.log('MetaMask is not available')
+    //             console.log(web3.currentProvider)
+    //         }
+    //     } else {
+    //         console.log('web3 is not found')
+    //     }
+    // })
+
+
+    // window.addEventListener("load", async () => {
+    //     // Modern dapp browsers...
+    //     if (window.ethereum) {
+    //         window.web3 = new Web3(window.ethereum);
+    //         try {
+    //             // Request account access if needed
+    //             await window.ethereum.enable();
+    //         } catch (error) {
+    //             // User denied account access...
+    //         }
+    //     }
+    //     // Legacy dapp browsers...
+    //     else if (window.web3) {
+    //         window.web3 = new Web3(web3.currentProvider);
+    //     }
+    //     // Non-dapp browsers...
+    //     else {
+    //         console.log("Non-Ethereum browser detected. You should consider trying MetaMask!");
+    //     }
+    // });
+    console.log(web3.currentProvider)
+
+
+    web3.eth.getAccounts().then(console.log);
+
+
+    let remixContract = new web3.eth.Contract([
+        {
+            "inputs": [],
+            "name": "getMessage",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "x",
+                    "type": "string"
+                }
+            ],
+            "name": "setMessage",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ], '0x74b91a7373123972becFd3714D4E4fdA4213751e');
+    console.log(remixContract.methods)
+
+    web3.eth.defaultAccount = "0xc6F04cc41A86E39Cd7f438eB747327300112C948"
+
+
+    console.log(`Default account = ${web3.eth.defaultAccount}`)
+
+    $("#setMessageButton").click(async function () {
+        let message = $("#userInput").val()
+        console.log("message: " + message)
+        const gas = await remixContract.methods.setMessage(message).estimateGas();
+        console.log("gas: " + gas)
+        let account = '0x8fAf846573d9fdbD40dA8819Ac07529095434FB0'
+        console.log("account: " + account)
+        await remixContract.methods.setMessage(message)
+            .send({from: account}).then(console.log);
+        await remixContract.methods.getMessage().call().then(console.log)
+    });
+
+
+
+</script>
+</body>
+
+</html>
