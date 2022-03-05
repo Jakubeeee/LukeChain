@@ -1,0 +1,19 @@
+{
+  "name": "prodzukt2",
+  "version": "1.0.0",
+  "description": "**PROJECT: Decentralized Star Notary Service Project** - For this project, you will create a DApp by adding functionality with your smart contract and deploy it on the public testnet.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openzeppelin-solidity": "^4.5.0",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "web3": "^1.7.1"
+  }
+}
