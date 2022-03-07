@@ -6,6 +6,7 @@ import "./Roles.sol";
 
 // Define a contract 'ConsumerRole' to manage this role - add, remove, check
 contract ConsumerRole {
+    using Roles for Roles.Role;
 
     // Define 2 events, one for Adding, and other for Removing
     event ConsumerAdded(address indexed account);
@@ -15,7 +16,7 @@ contract ConsumerRole {
     Roles.Role private consumers;
 
     // In the constructor make the address that deploys this contract the 1st consumer
-    constructor() public {
+    constructor() {
         _addConsumer(msg.sender);
     }
 

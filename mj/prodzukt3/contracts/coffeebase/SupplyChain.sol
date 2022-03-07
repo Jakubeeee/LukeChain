@@ -8,7 +8,7 @@ import "../coffeeaccesscontrol/FarmerRole.sol";
 import "../coffeeaccesscontrol/RetailerRole.sol";
 
 // Define a contract 'Supplychain'
-contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, RetailerRole {
+contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole {
 
 
   // Define 'owner'
