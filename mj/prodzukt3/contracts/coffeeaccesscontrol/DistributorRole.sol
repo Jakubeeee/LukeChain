@@ -37,7 +37,7 @@ contract DistributorRole {
 
     // Define a function 'renounceDistributor' to renounce this role
     function renounceDistributor() public {
-        _removeDistributor(account);
+        _removeDistributor(msg.sender);
     }
 
     // Define an internal function '_addDistributor' to add this role, called by 'addDistributor'
