@@ -162,27 +162,47 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
     }
 
     // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
-    function harvestItem(uint _upc, address _originFarmerID, string memory _originFarmName, string memory _originFarmInformation, string  memory _originFarmLatitude, string memory _originFarmLongitude, string memory _productNotes) public
+    function harvestItem(
+        uint _upc,
+        address _originFarmerID,
+        string memory _originFarmName,
+        string memory _originFarmInformation,
+        string  memory _originFarmLatitude,
+        string memory _originFarmLongitude,
+        string memory _productNotes) public onlyFarmer()
     {
         // Add the new item as part of Harvest
+        Item memory newItem;
+        newItem.sku = sku;
+        newItem.upc = _upc;
+        newItem.ownerID = _originFarmerID;
+        newItem.originFarmerID = _originFarmerID;
+        newItem.originFarmInformation = _originFarmInformation;
+        newItem.originFarmLatitude = _originFarmLatitude;
+        newItem.originFarmLongitude = _originFarmLongitude;
+        newItem.productNotes = _productNotes;
+        newItem.itemState = State.Harvested;
+        items[_upc] = newItem;
 
         // Increment sku
         sku = sku + 1;
         // Emit the appropriate event
-
+        emit Harvested(_upc);
     }
 
     // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
     function processItem(uint _upc) public
         // Call modifier to check if upc has passed previous supply chain stage
-
+    harvested(_upc)
         // Call modifier to verify caller of this function
-
+    verifyCaller(items[_upc].originFarmerID) onlyFarmer()
     {
         // Update the appropriate fields
+        Item memory itemToUpdate = items[_upc];
+        itemToUpdate.itemState = State.Processed;
 
         // Emit the appropriate event
-
+        Processed(_upc);
     }
 
     // Define a function 'packItem' that allows a farmer to mark an item 'Packed'

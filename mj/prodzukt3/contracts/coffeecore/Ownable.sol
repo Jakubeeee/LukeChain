@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "../coffeebase/SupplyChain.sol";
+
 /// Provides basic authorization control
 contract Ownable {
     address private origOwner;
