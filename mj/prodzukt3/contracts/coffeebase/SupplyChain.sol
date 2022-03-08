@@ -199,8 +199,9 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     onlyFarmer()
     {
         // Update the appropriate fields
-        Item memory itemToUpdate = items[_upc];
+        Item storage itemToUpdate = items[_upc];
         itemToUpdate.itemState = State.Processed;
+        items[_upc] = itemToUpdate;
 
         // Emit the appropriate event
         Processed(_upc);
@@ -216,8 +217,9 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     onlyFarmer()
     {
         // Update the appropriate fields
-        Item memory itemToUpdate = items[_upc];
+        Item storage itemToUpdate = items[_upc];
         itemToUpdate.itemState = State.Packed;
+        items[_upc] = itemToUpdate;
 
         // Emit the appropriate event
         Packed(_upc);
@@ -233,9 +235,10 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     onlyFarmer()
     {
         // Update the appropriate fields
-        Item memory itemToUpdate = items[_upc];
+        Item storage itemToUpdate = items[_upc];
         itemToUpdate.itemState = State.ForSale;
         itemToUpdate.productPrice = _price;
+        items[_upc] = itemToUpdate;
 
         // Emit the appropriate event
         ForSale(_upc);
@@ -257,10 +260,11 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     {
 
         // Update the appropriate fields - ownerID, distributorID, itemState
-        Item memory itemToUpdate = items[_upc];
+        Item storage itemToUpdate = items[_upc];
         itemToUpdate.ownerID = msg.sender;
         itemToUpdate.distributorID = msg.sender;
         itemToUpdate.itemState = State.Sold;
+        items[_upc] = itemToUpdate;
 
         // Transfer money to farmer
         address payable payableFarmerAddress = payable(itemToUpdate.originFarmerID);
@@ -283,8 +287,9 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
 
     {
         // Update the appropriate fields
-        Item memory itemToUpdate = items[_upc];
+        Item storage itemToUpdate = items[_upc];
         itemToUpdate.itemState = State.Shipped;
+        items[_upc] = itemToUpdate;
 
         // Emit the appropriate event
         Shipped(_upc);
@@ -300,10 +305,11 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     onlyRetailer()
     {
         // Update the appropriate fields - ownerID, retailerID, itemState
-        Item memory itemToUpdate = items[_upc];
+        Item storage itemToUpdate = items[_upc];
         itemToUpdate.ownerID = msg.sender;
         itemToUpdate.retailerID = msg.sender;
         itemToUpdate.itemState = State.Received;
+        items[_upc] = itemToUpdate;
 
         // Emit the appropriate event
         Received(_upc);
@@ -318,9 +324,11 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     onlyConsumer()
     {
         // Update the appropriate fields - ownerID, consumerID, itemState
-        items[_upc].ownerID = msg.sender;
-        items[_upc].consumerID = msg.sender;
-        items[_upc].itemState = State.Purchased;
+        Item storage itemToUpdate = items[_upc];
+        itemToUpdate.ownerID = msg.sender;
+        itemToUpdate.consumerID = msg.sender;
+        itemToUpdate.itemState = State.Purchased;
+        items[_upc] = itemToUpdate;
 
         // Emit the appropriate event
         emit Purchased(_upc);
