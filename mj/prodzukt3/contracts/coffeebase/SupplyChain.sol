@@ -169,7 +169,8 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
         string memory _originFarmInformation,
         string  memory _originFarmLatitude,
         string memory _originFarmLongitude,
-        string memory _productNotes) public onlyFarmer()
+        string memory _productNotes) public
+    onlyFarmer()
     {
         // Add the new item as part of Harvest
         Item memory newItem;
@@ -177,10 +178,12 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
         newItem.upc = _upc;
         newItem.ownerID = _originFarmerID;
         newItem.originFarmerID = _originFarmerID;
+        newItem.originFarmName = _originFarmName;
         newItem.originFarmInformation = _originFarmInformation;
         newItem.originFarmLatitude = _originFarmLatitude;
         newItem.originFarmLongitude = _originFarmLongitude;
         newItem.productNotes = _productNotes;
+        newItem.productID = sku + _upc;
         newItem.itemState = State.Harvested;
         items[_upc] = newItem;
 
