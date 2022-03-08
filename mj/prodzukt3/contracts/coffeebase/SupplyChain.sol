@@ -296,25 +296,36 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
     // Use the above modifiers to check if the item is shipped
     function receiveItem(uint _upc) public
         // Call modifier to check if upc has passed previous supply chain stage
-
+    shipped(_upc)
         // Access Control List enforced by calling Smart Contract / DApp
+    onlyRetailer()
     {
         // Update the appropriate fields - ownerID, retailerID, itemState
+        Item memory itemToUpdate = items[_upc];
+        itemToUpdate.ownerID = msg.sender;
+        itemToUpdate.retailerID = msg.sender;
+        itemToUpdate.itemState = State.Received;
 
         // Emit the appropriate event
-
+        Received(_upc);
     }
 
     // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
     // Use the above modifiers to check if the item is received
     function purchaseItem(uint _upc) public
         // Call modifier to check if upc has passed previous supply chain stage
-
+    received(_upc)
         // Access Control List enforced by calling Smart Contract / DApp
+    onlyConsumer()
     {
         // Update the appropriate fields - ownerID, consumerID, itemState
+        items[_upc].ownerID = msg.sender;
+        items[_upc].consumerID = msg.sender;
+        items[_upc].itemState = State.Purchased;
 
         // Emit the appropriate event
+        emit Purchased(_upc);
+
 
     }
 
@@ -332,7 +343,14 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
     )
     {
         // Assign values to the 8 parameters
-
+        itemSKU = items[_upc].sku;
+        itemUPC = items[_upc].upc;
+        ownerID = items[_upc].ownerID;
+        originFarmerID = items[_upc].originFarmerID;
+        originFarmName = items[_upc].originFarmName;
+        originFarmInformation = items[_upc].originFarmInformation;
+        originFarmLatitude = items[_upc].originFarmLatitude;
+        originFarmLongitude = items[_upc].originFarmLongitude;
 
         return
         (
@@ -362,7 +380,15 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
     )
     {
         // Assign values to the 9 parameters
-
+        itemSKU = items[_upc].sku;
+        itemUPC = items[_upc].upc;
+        productID = items[_upc].productID;
+        productNotes = items[_upc].productNotes;
+        productPrice = items[_upc].productPrice;
+        itemState = uint(items[_upc].itemState);
+        distributorID = items[_upc].distributorID;
+        retailerID = items[_upc].retailerID;
+        consumerID = items[_upc].consumerID;
 
         return
         (
