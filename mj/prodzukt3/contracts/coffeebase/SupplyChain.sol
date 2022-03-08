@@ -195,7 +195,9 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
         // Call modifier to check if upc has passed previous supply chain stage
     harvested(_upc)
         // Call modifier to verify caller of this function
-    verifyCaller(items[_upc].originFarmerID) onlyFarmer()
+    verifyCaller(items[_upc].originFarmerID)
+
+    onlyFarmer()
     {
         // Update the appropriate fields
         Item memory itemToUpdate = items[_upc];
@@ -208,26 +210,36 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
     // Define a function 'packItem' that allows a farmer to mark an item 'Packed'
     function packItem(uint _upc) public
         // Call modifier to check if upc has passed previous supply chain stage
-
+    processed(_upc)
         // Call modifier to verify caller of this function
+    verifyCaller(items[_upc].originFarmerID)
 
+    onlyFarmer()
     {
         // Update the appropriate fields
+        Item memory itemToUpdate = items[_upc];
+        itemToUpdate.itemState = State.Packed;
 
         // Emit the appropriate event
-
+        Packed(_upc);
     }
 
     // Define a function 'sellItem' that allows a farmer to mark an item 'ForSale'
     function sellItem(uint _upc, uint _price) public
         // Call modifier to check if upc has passed previous supply chain stage
-
+    packed(_upc)
         // Call modifier to verify caller of this function
+    verifyCaller(items[_upc].originFarmerID)
 
+    onlyFarmer()
     {
         // Update the appropriate fields
+        Item memory itemToUpdate = items[_upc];
+        itemToUpdate.itemState = State.ForSale;
+        itemToUpdate.productPrice = _price;
 
         // Emit the appropriate event
+        ForSale(_upc);
 
     }
 
@@ -236,18 +248,27 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
     // and any excess ether sent is refunded back to the buyer
     function buyItem(uint _upc) public payable
         // Call modifier to check if upc has passed previous supply chain stage
-
+    forSale(_upc)
         // Call modifer to check if buyer has paid enough
-
+    paidEnough(items[_upc].productPrice)
         // Call modifer to send any excess ether back to buyer
+    checkValue(_upc)
 
+    onlyDistributor()
     {
 
         // Update the appropriate fields - ownerID, distributorID, itemState
+        Item memory itemToUpdate = items[_upc];
+        itemToUpdate.ownerID = msg.sender;
+        itemToUpdate.distributorID = msg.sender;
+        itemToUpdate.itemState = State.Sold;
 
         // Transfer money to farmer
+        address payable payableFarmerAddress = payable(itemToUpdate.originFarmerID);
+        payableFarmerAddress.transfer(msg.value);
 
         // emit the appropriate event
+        Sold(_upc);
 
     }
 
@@ -255,13 +276,19 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole 
     // Use the above modifers to check if the item is sold
     function shipItem(uint _upc) public
         // Call modifier to check if upc has passed previous supply chain stage
-
+    sold(_upc)
         // Call modifier to verify caller of this function
+    verifyCaller(items[_upc].ownerID)
+
+    onlyDistributor()
 
     {
         // Update the appropriate fields
+        Item memory itemToUpdate = items[_upc];
+        itemToUpdate.itemState = State.Shipped;
 
         // Emit the appropriate event
+        Shipped(_upc);
 
     }
 
