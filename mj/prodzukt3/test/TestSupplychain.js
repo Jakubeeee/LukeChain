@@ -194,7 +194,7 @@ contract('SupplyChain', accounts => {
 
         // Declare and Initialize a variable for event
         // Mark an item as Purchased by calling function purchaseItem()
-        const tx = await supplyChain.receiveItem(upc, {from: consumerID})
+        const tx = await supplyChain.purchaseItem(upc, {from: consumerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
