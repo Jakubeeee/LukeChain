@@ -17,6 +17,7 @@ contract('SupplyChain', accounts => {
     let productID = sku + upc
     const productNotes = "Best beans for Espresso"
     const productPrice = web3.utils.toWei(".01", "ether")
+    const funds = web3.utils.toWei(".05", "ether")
     let itemState = 0
     const distributorID = accounts[2]
     const retailerID = accounts[3]
@@ -98,108 +99,101 @@ contract('SupplyChain', accounts => {
     it("Testing smart contract function packItem() that allows a farmer to pack coffee", async () => {
 
         // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event Packed()
-
-
         // Mark an item as Packed by calling function packItem()
+        const tx = await supplyChain.packItem(upc, {from: originFarmerID})
 
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
+        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
 
         // Verify the result set
-
+        assert.equal(resultBufferOne[1], upc, 'Error: Invalid item UPC')
+        assert.equal(resultBufferOne[2], originFarmerID, 'Error: Missing or Invalid ownerID')
+        assert.equal(resultBufferTwo[5], 2, 'Error: Invalid item State')
+        truffleAssert.eventEmitted(tx, 'Packed');
     })
 
     // 4th Test
     it("Testing smart contract function sellItem() that allows a farmer to sell coffee", async () => {
 
         // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event ForSale()
-
-
         // Mark an item as ForSale by calling function sellItem()
-
+        const tx = await supplyChain.sellItem(upc, productPrice, {from: originFarmerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
+        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
 
         // Verify the result set
-
+        assert.equal(resultBufferOne[1], upc, 'Error: Invalid item UPC')
+        assert.equal(resultBufferOne[2], originFarmerID, 'Error: Missing or Invalid ownerID')
+        assert.equal(resultBufferTwo[4], productPrice, 'Error: Missing or Invalid product price')
+        assert.equal(resultBufferTwo[5], 3, 'Error: Invalid item State')
+        truffleAssert.eventEmitted(tx, 'ForSale');
     })
 
     // 5th Test
     it("Testing smart contract function buyItem() that allows a distributor to buy coffee", async () => {
 
         // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event Sold()
-
-
         // Mark an item as Sold by calling function buyItem()
-
+        const tx = await supplyChain.buyItem(upc, {from: distributorID, value: funds})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
+        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
 
         // Verify the result set
-
+        assert.equal(resultBufferOne[1], upc, 'Error: Invalid item UPC')
+        assert.equal(resultBufferOne[2], distributorID, 'Error: Missing or Invalid ownerID')
+        assert.equal(resultBufferOne[3], originFarmerID, 'Error: Missing or Invalid ownerID')
+        assert.equal(resultBufferTwo[6], distributorID, 'Error: Missing or Invalid distributorID')
+        assert.equal(resultBufferTwo[5], 4, 'Error: Invalid item State')
+        truffleAssert.eventEmitted(tx, 'Sold');
     })
 
     // 6th Test
     it("Testing smart contract function shipItem() that allows a distributor to ship coffee", async () => {
 
         // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event Shipped()
-
-
-        // Mark an item as Sold by calling function buyItem()
-
+        // Mark an item as Shipped by calling function shipItem()
+        const tx = await supplyChain.shipItem(upc, {from: distributorID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
+        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
 
         // Verify the result set
-
+        assert.equal(resultBufferTwo[1], upc, 'Error: Invalid item UPC')
+        assert.equal(resultBufferTwo[5], 5, 'Error: Invalid item State')
+        assert.equal(resultBufferTwo[6], distributorID, 'Error: Missing or Invalid distributorID')
+        truffleAssert.eventEmitted(tx, 'Shipped');
     })
 
     // 7th Test
     it("Testing smart contract function receiveItem() that allows a retailer to mark coffee received", async () => {
 
         // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event Received()
-
-
         // Mark an item as Sold by calling function buyItem()
-
+        const tx = await supplyChain.receiveItem(upc, {from: retailerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
+        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
 
         // Verify the result set
-
+        assert.equal(resultBufferTwo[1], upc, 'Error: Invalid item UPC')
+        assert.equal(resultBufferTwo[5], 6, 'Error: Invalid item State')
+        assert.equal(resultBufferTwo[6], distributorID, 'Error: Missing or Invalid distributorID')
+        assert.equal(resultBufferTwo[7], retailerID, 'Error: Missing or Invalid distributorID')
+        truffleAssert.eventEmitted(tx, 'Received');
     })
 
     // 8th Test
     it("Testing smart contract function purchaseItem() that allows a consumer to purchase coffee", async () => {
 
         // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event Purchased()
-
-
-        // Mark an item as Sold by calling function buyItem()
-
+        // Mark an item as Purchased by calling function purchaseItem()
+        const tx = await supplyChain.receiveItem(upc, {from: retailerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
 
