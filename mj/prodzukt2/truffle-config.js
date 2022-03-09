@@ -56,13 +56,6 @@ module.exports = {
       host: "127.0.0.1",
       port: 8545,
       network_id: "*",
-      gas: 50000000,
-      gasLimit: 8000000
-    },
-
-    test: {
-      gas: 50000000,
-      gasLimit: 8000000
     },
 
     // Another network with more advanced options...
@@ -96,7 +89,8 @@ module.exports = {
 
   // Set default mocha options here, use special reporters etc.
   mocha: {
-    timeout: 100000
+    timeout: 100000,
+    useColors: true
   },
 
   // Configure your compilers

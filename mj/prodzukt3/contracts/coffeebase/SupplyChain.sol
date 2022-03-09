@@ -90,8 +90,8 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
         _;
         uint _price = items[_upc].productPrice;
         uint amountToReturn = msg.value - _price;
-        address payable payableConsumerID = payable(items[_upc].consumerID);
-        payableConsumerID.transfer(amountToReturn);
+        address payable payableDistributorID = payable(items[_upc].distributorID);
+        payableDistributorID.transfer(amountToReturn);
     }
 
     // Define a modifier that checks if an item.state of a upc is Harvested
@@ -268,7 +268,7 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
 
         // Transfer money to farmer
         address payable payableFarmerAddress = payable(itemToUpdate.originFarmerID);
-        payableFarmerAddress.transfer(msg.value);
+        payableFarmerAddress.transfer(itemToUpdate.productPrice);
 
         // emit the appropriate event
         Sold(_upc);
